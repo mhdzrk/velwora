@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velwora — Coming Soon</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blush: #f5e6e0;
+    --cream: #faf6f2;
+    --rose: #e8c4c0;
+    --pink-soft: #f3ddd8;
+    --gold: #c9a96e;
+    --gold-light: #d4b87a;
+    --charcoal: #2c2422;
+    --warm-gray: #6b5e5a;
+    --soft-white: #fefcfa;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* Background */
+  .bg-gradient {
+    position: fixed; inset: 0; z-index: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(232,196,192,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 80% 80%, rgba(201,169,110,0.12) 0%, transparent 55%),
+      var(--cream);
+  }
+
+  /* Particles */
+  .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .particle {
+    position: absolute; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold); opacity: 0; animation: floatUp linear infinite;
+  }
+  .particle:nth-child(1){left:10%;animation-duration:14s;animation-delay:0s}
+  .particle:nth-child(2){left:25%;animation-duration:18s;animation-delay:2s}
+  .particle:nth-child(3){left:40%;animation-duration:12s;animation-delay:4s}
+  .particle:nth-child(4){left:55%;animation-duration:16s;animation-delay:1s}
+  .particle:nth-child(5){left:70%;animation-duration:20s;animation-delay:3s}
+  .particle:nth-child(6){left:85%;animation-duration:15s;animation-delay:5s}
+  @keyframes floatUp {
+    0%{transform:translateY(100vh) scale(0);opacity:0}
+    10%{opacity:0.25}50%{opacity:0.12}
+    100%{transform:translateY(-10vh) scale(1);opacity:0}
+  }
+
+  /* Top Bar */
+  .top-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+    padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(to bottom, var(--cream) 60%, transparent);
+    animation: fadeDown 1s ease 0.2s both;
+  }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  .top-bar-link {
+    font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 400;
+    letter-spacing: 2.5px; text-transform: uppercase; color: var(--warm-gray);
+    text-decoration: none; transition: color 0.3s;
+  }
+  .top-bar-link:hover { color: var(--gold); }
+
+  /* ========== HERO ========== */
+  .hero {
+    position: relative; z-index: 1; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 100px 24px 50px; text-align: center;
+  }
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(50px, 11vw, 100px); letter-spacing: 14px;
+    text-transform: uppercase; color: var(--charcoal);
+    animation: revealUp 1.2s cubic-bezier(0.22,1,0.36,1) 0.4s both;
+  }
+  .brand-name::after {
+    content: ''; display: block; width: 60px; height: 1px;
+    background: var(--gold); margin: 20px auto 0;
+    animation: expandLine 1s ease 1.2s both;
+  }
+  @keyframes expandLine { from{width:0;opacity:0} to{width:60px;opacity:1} }
+  @keyframes revealUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+  .tagline {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
+    font-size: clamp(17px, 3vw, 22px); color: var(--warm-gray);
+    margin-top: 24px; letter-spacing: 1px;
+    animation: revealUp 1.2s cubic-bezier(0.22,1,0.36,1) 0.7s both;
+  }
+
+  /* Hero Image Row */
+  .hero-images {
+    display: flex; gap: 16px; margin: 44px 0 40px; justify-content: center;
+    animation: revealUp 1.2s cubic-bezier(0.22,1,0.36,1) 0.85s both;
+  }
+  .hero-img {
+    width: 140px; height: 180px; border-radius: 100px; overflow: hidden;
+    border: 2px solid rgba(201,169,110,0.2);
+    background: linear-gradient(145deg, var(--blush), var(--cream));
+    transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+  }
+  .hero-img:nth-child(2) { transform: translateY(20px); }
+  .hero-img:nth-child(4) { transform: translateY(20px); }
+  .hero-img:hover { transform: translateY(-6px) scale(1.03); }
+  .hero-img:nth-child(2):hover,
+  .hero-img:nth-child(4):hover { transform: translateY(14px) scale(1.03); }
+  .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Countdown */
+  .countdown-label {
+    font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 400;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--warm-gray);
+    margin-bottom: 24px; animation: revealUp 1s ease 1.1s both;
+  }
+  .countdown {
+    display: flex; justify-content: center; gap: 12px;
+    margin-bottom: 48px; animation: revealUp 1s ease 1.2s both;
+  }
+  .countdown-item {
+    text-align: center; min-width: 78px; padding: 18px 14px;
+    background: rgba(255,255,255,0.55); backdrop-filter: blur(12px);
+    border: 1px solid rgba(201,169,110,0.15); border-radius: 16px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .countdown-item:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(201,169,110,0.12); }
+  .countdown-number {
+    font-family: 'Cormorant Garamond', serif; font-weight: 400;
+    font-size: 38px; color: var(--charcoal); line-height: 1;
+  }
+  .countdown-unit {
+    font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--warm-gray); margin-top: 8px; display: block;
+  }
+
+  /* Form */
+  .form-section { animation: revealUp 1s ease 1.4s both; }
+  .form-text {
+    font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 300;
+    color: var(--warm-gray); margin-bottom: 24px; line-height: 1.7;
+  }
+  .form-wrapper {
+    display: flex; max-width: 460px; margin: 0 auto;
+    border: 1px solid var(--rose); border-radius: 50px; overflow: hidden;
+    background: rgba(255,255,255,0.6); backdrop-filter: blur(10px);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .form-wrapper:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,169,110,0.1); }
+  .form-wrapper input {
+    flex: 1; border: none; background: transparent; padding: 16px 28px;
+    font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 300;
+    color: var(--charcoal); outline: none;
+  }
+  .form-wrapper input::placeholder { color: #b5a9a4; letter-spacing: 1px; }
+  .form-wrapper button {
+    border: none; background: var(--charcoal); color: var(--soft-white);
+    padding: 16px 32px; font-family: 'Jost', sans-serif; font-size: 11px;
+    font-weight: 400; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s, letter-spacing 0.3s; white-space: nowrap;
+  }
+  .form-wrapper button:hover { background: var(--gold); letter-spacing: 4px; }
+  .success-message {
+    display: none; font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 16px; color: var(--gold); margin-top: 16px;
+  }
+  .success-message.show { display: block; animation: revealUp 0.6s ease both; }
+
+  .scroll-hint {
+    margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    animation: revealUp 1s ease 1.7s both;
+  }
+  .scroll-hint span {
+    font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--warm-gray); opacity: 0.6;
+  }
+  .scroll-arrow {
+    width: 18px; height: 18px; border-right: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold); transform: rotate(45deg);
+    animation: bounceDown 2s ease infinite;
+  }
+  @keyframes bounceDown {
+    0%,100%{transform:rotate(45deg) translateY(0);opacity:0.4}
+    50%{transform:rotate(45deg) translateY(6px);opacity:1}
+  }
+
+  /* ========== SECTIONS COMMON ========== */
+  .section-label {
+    font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold); text-align: center; margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(28px, 5vw, 44px); text-align: center;
+    color: var(--charcoal); margin-bottom: 48px; letter-spacing: 2px;
+  }
+
+  /* ========== IMAGE CONTAINERS (fallback bg) ========== */
+  .img-box {
+    background: linear-gradient(145deg, #f0e4d8, #e8dcd0);
+    overflow: hidden; border-radius: 16px; position: relative;
+  }
+  .img-box img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.8s cubic-bezier(0.22,1,0.36,1);
+  }
+  .img-box:hover img { transform: scale(1.08); }
+
+  /* ========== MOSAIC ========== */
+  .gallery-section { position: relative; z-index: 1; padding: 80px 24px; }
+  .mosaic {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 160px; gap: 14px;
+  }
+  .mosaic .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(44,36,34,0.5) 0%, transparent 50%);
+    opacity: 0; transition: opacity 0.4s;
+    display: flex; align-items: flex-end; padding: 20px;
+  }
+  .mosaic .img-box:hover .overlay { opacity: 1; }
+  .overlay-text {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 17px; color: #fff; letter-spacing: 1px;
+  }
+  .m1 { grid-column: span 7; grid-row: span 2; cursor: pointer; }
+  .m2 { grid-column: span 5; grid-row: span 1; cursor: pointer; }
+  .m3 { grid-column: span 5; grid-row: span 1; cursor: pointer; }
+  .m4 { grid-column: span 4; grid-row: span 2; cursor: pointer; }
+  .m5 { grid-column: span 4; grid-row: span 2; cursor: pointer; }
+  .m6 { grid-column: span 4; grid-row: span 2; cursor: pointer; }
+
+  /* ========== SCROLLING STRIP ========== */
+  .scroll-strip-section { position: relative; z-index: 1; padding: 20px 0 80px; overflow: hidden; }
+  .scroll-strip {
+    display: flex; gap: 18px; width: max-content;
+    animation: scrollLeft 40s linear infinite;
+  }
+  .scroll-strip .strip-img {
+    width: 240px; height: 320px; border-radius: 20px; overflow: hidden;
+    flex-shrink: 0; background: linear-gradient(145deg, #f0e4d8, #e8dcd0);
+    transition: transform 0.4s;
+  }
+  .scroll-strip .strip-img:hover { transform: scale(1.04) rotate(-1deg); }
+  .scroll-strip .strip-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @keyframes scrollLeft { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ========== ROSE COLLECTION ========== */
+  .collection-teaser {
+    position: relative; z-index: 1; padding: 80px 24px;
+    background: linear-gradient(135deg, var(--pink-soft) 0%, var(--cream) 100%);
+  }
+  .teaser-grid {
+    max-width: 1000px; margin: 0 auto; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+  }
+  .teaser-images { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .teaser-img { border-radius: 16px; overflow: hidden; aspect-ratio: 3/4; background: linear-gradient(145deg, #f0e4d8, #e8dcd0); }
+  .teaser-img:first-child { transform: translateY(20px); }
+  .teaser-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+  .teaser-img:hover img { transform: scale(1.06); }
+  .teaser-content { padding: 20px; }
+  .teaser-content .section-label { text-align: left; margin-bottom: 12px; }
+  .teaser-content h3 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    font-size: clamp(28px, 4vw, 42px); color: var(--charcoal);
+    margin-bottom: 20px; line-height: 1.2;
+  }
+  .teaser-content p {
+    font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 300;
+    color: var(--warm-gray); line-height: 1.8; margin-bottom: 28px;
+  }
+  .teaser-btn {
+    display: inline-block; font-family: 'Jost', sans-serif; font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--charcoal);
+    text-decoration: none; border: 1px solid var(--charcoal);
+    padding: 14px 36px; border-radius: 50px; transition: all 0.3s;
+  }
+  .teaser-btn:hover { background: var(--charcoal); color: var(--soft-white); letter-spacing: 4px; }
+
+  /* ========== CATEGORIES ========== */
+  .categories-section { position: relative; z-index: 1; padding: 80px 24px; }
+  .category-grid {
+    max-width: 1000px; margin: 0 auto; display: grid;
+    grid-template-columns: repeat(4, 1fr); gap: 18px;
+  }
+  .category-card {
+    position: relative; border-radius: 20px; overflow: hidden;
+    aspect-ratio: 3/4; cursor: pointer; background: linear-gradient(145deg, #f0e4d8, #e8dcd0);
+  }
+  .category-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+  .category-card:hover img { transform: scale(1.1); }
+  .card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(44,36,34,0.55) 0%, rgba(44,36,34,0.08) 40%, transparent 100%);
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-end; padding: 28px 16px; transition: background 0.4s;
+  }
+  .category-card:hover .card-overlay {
+    background: linear-gradient(to top, rgba(44,36,34,0.7) 0%, rgba(44,36,34,0.15) 50%, transparent 100%);
+  }
+  .card-label { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 22px; color: #fff; letter-spacing: 2px; }
+  .card-tag { font-family: 'Jost', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 6px; }
+
+  /* ========== CRAFTED WITH CARE ========== */
+  .crafted-section {
+    position: relative; z-index: 1; padding: 80px 24px;
+    background: var(--charcoal); color: var(--soft-white); text-align: center;
+  }
+  .crafted-section .section-label { color: var(--gold); }
+  .crafted-section .section-title { color: var(--soft-white); margin-bottom: 16px; }
+  .crafted-desc {
+    font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 300;
+    color: rgba(255,255,255,0.55); max-width: 500px; margin: 0 auto 48px; line-height: 1.8;
+  }
+  .crafted-images {
+    max-width: 900px; margin: 0 auto; display: grid;
+    grid-template-columns: repeat(3, 1fr); gap: 18px;
+  }
+  .crafted-img {
+    border-radius: 16px; overflow: hidden; aspect-ratio: 1;
+    background: linear-gradient(145deg, #3d3230, #4a3f3d);
+  }
+  .crafted-img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.9); transition: transform 0.6s, filter 0.4s; }
+  .crafted-img:hover img { transform: scale(1.06); filter: brightness(1); }
+
+  /* ========== FOOTER ========== */
+  .footer-cta {
+    position: relative; z-index: 1; padding: 80px 24px; text-align: center;
+    background: linear-gradient(to bottom, var(--cream), var(--blush));
+  }
+  .footer-cta .section-title { margin-bottom: 16px; }
+  .footer-cta .form-text { max-width: 400px; margin: 0 auto 28px; }
+  .social-footer {
+    position: relative; z-index: 1; background: var(--blush);
+    padding: 32px 24px; display: flex; justify-content: center; gap: 32px;
+  }
+  .social-link {
+    font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--warm-gray); text-decoration: none;
+    transition: color 0.3s; position: relative;
+  }
+  .social-link::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width 0.3s; }
+  .social-link:hover { color: var(--gold); }
+  .social-link:hover::after { width: 100%; }
+  .copyright {
+    text-align: center; padding: 20px; background: var(--blush);
+    font-family: 'Jost', sans-serif; font-size: 11px; color: var(--warm-gray); letter-spacing: 1px;
+  }
+
+  /* Scroll Reveal */
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 768px) {
+    .top-bar { padding: 16px 20px; }
+    .hero { padding: 100px 20px 50px; }
+    .brand-name { letter-spacing: 6px; }
+    .hero-images { gap: 10px; }
+    .hero-img { width: 90px; height: 120px; }
+    .countdown { gap: 8px; }
+    .countdown-item { min-width: 64px; padding: 14px 10px; }
+    .countdown-number { font-size: 30px; }
+    .form-wrapper { flex-direction: column; border-radius: 20px; }
+    .form-wrapper input { text-align: center; padding: 16px 20px; }
+    .form-wrapper button { border-radius: 0 0 20px 20px; padding: 14px 28px; }
+    .mosaic { grid-template-columns: repeat(6, 1fr); grid-auto-rows: 140px; }
+    .m1 { grid-column: span 6; grid-row: span 2; }
+    .m2 { grid-column: span 3; } .m3 { grid-column: span 3; }
+    .m4 { grid-column: span 6; grid-row: span 2; }
+    .m5 { grid-column: span 3; grid-row: span 1; } .m6 { grid-column: span 3; grid-row: span 1; }
+    .teaser-grid { grid-template-columns: 1fr; gap: 32px; }
+    .teaser-content { text-align: center; }
+    .teaser-content .section-label { text-align: center; }
+    .category-grid { grid-template-columns: 1fr 1fr; }
+    .scroll-strip .strip-img { width: 190px; height: 260px; }
+  }
+  @media (max-width: 480px) {
+    .hero-images { flex-wrap: wrap; }
+    .hero-img { width: 80px; height: 105px; }
+    .mosaic { grid-template-columns: 1fr 1fr; grid-auto-rows: auto; }
+    .m1,.m2,.m3,.m4,.m5,.m6 { grid-column: span 1; grid-row: span 1; }
+    .m1 { grid-column: span 2; aspect-ratio: 16/9; }
+    .m2,.m3,.m4,.m5,.m6 { aspect-ratio: 1; }
+    .crafted-images { grid-template-columns: 1fr; }
+    .crafted-img { aspect-ratio: 16/10; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="particles">
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  <div class="particle"></div><div class="particle"></div><div class="particle"></div>
+</div>
+
+<nav class="top-bar">
+  <a href="#" class="top-bar-link">Velwora.com</a>
+  <a href="mailto:hello@velwora.com" class="top-bar-link">Contact</a>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <h1 class="brand-name">Velwora</h1>
+  <p class="tagline">Delicate Jewellery for Everyday Elegance</p>
+
+  <div class="hero-images">
+    <div class="hero-img">
+      <img src="https://images.pexels.com/photos/10983780/pexels-photo-10983780.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop" alt="Gold rings on satin">
+    </div>
+    <div class="hero-img">
+      <img src="https://images.pexels.com/photos/8891773/pexels-photo-8891773.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop" alt="Gold chain necklace">
+    </div>
+    <div class="hero-img">
+      <img src="https://images.pexels.com/photos/10983783/pexels-photo-10983783.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop" alt="Gold earrings">
+    </div>
+    <div class="hero-img">
+      <img src="https://images.pexels.com/photos/12456862/pexels-photo-12456862.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop" alt="Gold bracelet">
+    </div>
+  </div>
+
+  <p class="countdown-label">Launching Soon</p>
+  <div class="countdown">
+    <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-unit">Days</span></div>
+    <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-unit">Hours</span></div>
+    <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-unit">Min</span></div>
+    <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-unit">Sec</span></div>
+  </div>
+
+  <div class="form-section">
+    <p class="form-text">Be the first to discover our collection.<br>Join the waitlist for early access & exclusive offers.</p>
+    <div class="form-wrapper" id="emailForm">
+      <input type="email" id="emailInput" placeholder="Your email address">
+      <button type="button" id="notifyBtn">Notify Me</button>
+    </div>
+    <p class="success-message" id="successMsg">Thank you — you're on the list.</p>
+  </div>
+
+  <div class="scroll-hint"><span>Explore</span><div class="scroll-arrow"></div></div>
+</section>
+
+<!-- ========== MOSAIC GALLERY ========== -->
+<section class="gallery-section">
+  <div class="reveal">
+    <p class="section-label">Sneak Peek</p>
+    <h2 class="section-title">A Glimpse of What's Coming</h2>
+  </div>
+  <div class="mosaic reveal reveal-delay-1">
+    <div class="img-box m1">
+      <img src="https://images.pexels.com/photos/3641059/pexels-photo-3641059.jpeg?auto=compress&cs=tinysrgb&w=900&h=600&fit=crop" alt="Gold jewellery on satin" loading="lazy">
+      <div class="overlay"><span class="overlay-text">Timeless Pieces</span></div>
+    </div>
+    <div class="img-box m2">
+      <img src="https://images.pexels.com/photos/10983780/pexels-photo-10983780.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Gold stacking rings" loading="lazy">
+      <div class="overlay"><span class="overlay-text">Stacking Rings</span></div>
+    </div>
+    <div class="img-box m3">
+      <img src="https://images.pexels.com/photos/8891773/pexels-photo-8891773.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop" alt="Layered necklaces" loading="lazy">
+      <div class="overlay"><span class="overlay-text">Layered Necklaces</span></div>
+    </div>
+    <div class="img-box m4">
+      <img src="https://images.pexels.com/photos/10983783/pexels-photo-10983783.jpeg?auto=compress&cs=tinysrgb&w=500&h=650&fit=crop" alt="Gold hoop earrings" loading="lazy">
+      <div class="overlay"><span class="overlay-text">Hoop Earrings</span></div>
+    </div>
+    <div class="img-box m5">
+      <img src="https://images.pexels.com/photos/12456862/pexels-photo-12456862.jpeg?auto=compress&cs=tinysrgb&w=500&h=650&fit=crop" alt="Gold bracelet" loading="lazy">
+      <div class="overlay"><span class="overlay-text">Chain Bracelets</span></div>
+    </div>
+    <div class="img-box m6">
+      <img src="https://images.pexels.com/photos/10983784/pexels-photo-10983784.jpeg?auto=compress&cs=tinysrgb&w=500&h=650&fit=crop" alt="Charm pendant" loading="lazy">
+      <div class="overlay"><span class="overlay-text">Charm Pendants</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SCROLLING STRIP ========== -->
+<section class="scroll-strip-section">
+  <div class="scroll-strip">
+    <div class="strip-img"><img src="https://images.pexels.com/photos/3641059/pexels-photo-3641059.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Jewellery" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/10983780/pexels-photo-10983780.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Rings" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/8891773/pexels-photo-8891773.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Necklace" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/10983783/pexels-photo-10983783.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Earrings" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/12456862/pexels-photo-12456862.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Bracelet" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/10983784/pexels-photo-10983784.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Pendant" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Rose" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Gold pieces" loading="lazy"></div>
+    <!-- Duplicated for seamless loop -->
+    <div class="strip-img"><img src="https://images.pexels.com/photos/3641059/pexels-photo-3641059.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Jewellery" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/10983780/pexels-photo-10983780.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Rings" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/8891773/pexels-photo-8891773.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Necklace" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/10983783/pexels-photo-10983783.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Earrings" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/12456862/pexels-photo-12456862.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Bracelet" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/10983784/pexels-photo-10983784.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Pendant" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Rose" loading="lazy"></div>
+    <div class="strip-img"><img src="https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=500&h=660&fit=crop" alt="Gold pieces" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- ========== ROSE COLLECTION ========== -->
+<section class="collection-teaser">
+  <div class="teaser-grid reveal">
+    <div class="teaser-images">
+      <div class="teaser-img">
+        <img src="https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&w=500&h=700&fit=crop" alt="Pink rose" loading="lazy">
+      </div>
+      <div class="teaser-img">
+        <img src="https://images.pexels.com/photos/10983784/pexels-photo-10983784.jpeg?auto=compress&cs=tinysrgb&w=500&h=700&fit=crop" alt="Gold pendant" loading="lazy">
+      </div>
+    </div>
+    <div class="teaser-content">
+      <p class="section-label">Featured Collection</p>
+      <h3>The Rose<br>Collection</h3>
+      <p>A delicate collection inspired by timeless elegance and effortless beauty. Each piece captures the softness of a rose petal — crafted with 18k gold and the finest attention to detail.</p>
+      <a href="#" class="teaser-btn">Coming Soon</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CATEGORIES ========== -->
+<section class="categories-section">
+  <div class="reveal">
+    <p class="section-label">Explore</p>
+    <h2 class="section-title">Shop by Category</h2>
+  </div>
+  <div class="category-grid reveal reveal-delay-1">
+    <div class="category-card">
+      <img src="https://images.pexels.com/photos/10983780/pexels-photo-10983780.jpeg?auto=compress&cs=tinysrgb&w=500&h=670&fit=crop" alt="Rings" loading="lazy">
+      <div class="card-overlay"><span class="card-label">Rings</span><span class="card-tag">Coming Soon</span></div>
+    </div>
+    <div class="category-card">
+      <img src="https://images.pexels.com/photos/8891773/pexels-photo-8891773.jpeg?auto=compress&cs=tinysrgb&w=500&h=670&fit=crop" alt="Necklaces" loading="lazy">
+      <div class="card-overlay"><span class="card-label">Necklaces</span><span class="card-tag">Coming Soon</span></div>
+    </div>
+    <div class="category-card">
+      <img src="https://images.pexels.com/photos/10983783/pexels-photo-10983783.jpeg?auto=compress&cs=tinysrgb&w=500&h=670&fit=crop" alt="Earrings" loading="lazy">
+      <div class="card-overlay"><span class="card-label">Earrings</span><span class="card-tag">Coming Soon</span></div>
+    </div>
+    <div class="category-card">
+      <img src="https://images.pexels.com/photos/12456862/pexels-photo-12456862.jpeg?auto=compress&cs=tinysrgb&w=500&h=670&fit=crop" alt="Bracelets" loading="lazy">
+      <div class="card-overlay"><span class="card-label">Bracelets</span><span class="card-tag">Coming Soon</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CRAFTED WITH CARE ========== -->
+<section class="crafted-section">
+  <div class="reveal">
+    <p class="section-label">Our Promise</p>
+    <h2 class="section-title">Crafted With Care</h2>
+    <p class="crafted-desc">We believe jewellery should be timeless and delicate, each piece thoughtfully designed to celebrate simplicity and everyday elegance.</p>
+  </div>
+  <div class="crafted-images reveal reveal-delay-1">
+    <div class="crafted-img">
+      <img src="https://images.pexels.com/photos/3641059/pexels-photo-3641059.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop" alt="Crafted detail" loading="lazy">
+    </div>
+    <div class="crafted-img">
+      <img src="https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop" alt="Gold detail" loading="lazy">
+    </div>
+    <div class="crafted-img">
+      <img src="https://images.pexels.com/photos/10983780/pexels-photo-10983780.jpeg?auto=compress&cs=tinysrgb&w=600&h=600&fit=crop" alt="Ring detail" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER CTA ========== -->
+<section class="footer-cta">
+  <div class="reveal">
+    <p class="section-label">Stay Connected</p>
+    <h2 class="section-title">Join Our Community</h2>
+    <p class="form-text">Be the first to discover new collections and exclusive offers.</p>
+    <div class="form-wrapper" id="emailForm2">
+      <input type="email" id="emailInput2" placeholder="Your email address">
+      <button type="button" id="notifyBtn2">Subscribe</button>
+    </div>
+    <p class="success-message" id="successMsg2">You're in — welcome to Velwora.</p>
+  </div>
+</section>
+
+<div class="social-footer">
+  <a href="#" class="social-link">Instagram</a>
+  <a href="#" class="social-link">Pinterest</a>
+  <a href="#" class="social-link">Facebook</a>
+</div>
+<div class="copyright">&copy; 2026 Velwora. All Rights Reserved.</div>
+
+<script>
+  // Countdown
+  const launchDate = new Date();
+  launchDate.setDate(launchDate.getDate() + 30);
+  function updateCountdown() {
+    const diff = launchDate - new Date();
+    if (diff <= 0) return;
+    document.getElementById('days').textContent = String(Math.floor(diff/(1000*60*60*24))).padStart(2,'0');
+    document.getElementById('hours').textContent = String(Math.floor((diff/(1000*60*60))%24)).padStart(2,'0');
+    document.getElementById('minutes').textContent = String(Math.floor((diff/(1000*60))%60)).padStart(2,'0');
+    document.getElementById('seconds').textContent = String(Math.floor((diff/1000)%60)).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // Forms
+  function setupForm(formId, inputId, btnId, msgId) {
+    document.getElementById(btnId).addEventListener('click', () => {
+      const input = document.getElementById(inputId);
+      const email = input.value.trim();
+      if (email && email.includes('@') && email.includes('.')) {
+        document.getElementById(msgId).classList.add('show');
+        input.value = '';
+        document.getElementById(formId).style.opacity = '0.5';
+        document.getElementById(formId).style.pointerEvents = 'none';
+      } else {
+        input.style.outline = '2px solid #e8c4c0';
+        setTimeout(() => input.style.outline = 'none', 1500);
+      }
+    });
+    document.getElementById(inputId).addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') document.getElementById(btnId).click();
+    });
+  }
+  setupForm('emailForm','emailInput','notifyBtn','successMsg');
+  setupForm('emailForm2','emailInput2','notifyBtn2','successMsg2');
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
